@@ -23,6 +23,7 @@ goog.require('piine.View');
  * @extends {goog.events.EventTarget}
  */
 piine.App = function() {
+  goog.base(this);
   this.handler_ = this.createHandler();
   this.socket_ = this.createWebSocket();
   this.view_ = this.createView();
@@ -112,15 +113,10 @@ piine.App.prototype.attachEvents = function() {
         goog.events.EventType.UNLOAD,
         this.handleUnload);
 
-    this.handler_.listen(
-       this.socket_,
-       piine.App.EventType.RECEIVE_PIINE,
-       this.handleReceivePiine);
-
-    this.handler_.listen(
+    this.handler_.listenOnce(
         this.socket_,
-        socketio.Socket.EventType.ERROR,
-        this.handleServerError);
+        socketio.Socket.EventType.LOAD,
+        this.handleLoad);
 
     this.handler_.listen(
         this.view_,
@@ -185,6 +181,27 @@ piine.App.prototype.render = function() {
  */
 piine.App.prototype.sendPiine = function() {
   this.socket_.dispatchEventOnServer(piine.App.EventType.SEND_PIINE);
+};
+
+
+/**
+ * Handles an load event.
+ * @protected
+ */
+piine.App.prototype.handleLoad = function() {
+  // TODO: The listener was set by EventHandler does not work by unknown cause.
+  //this.handler_.listen(
+  //   this.socket_,
+  //   piine.App.EventType.RECEIVE_PIINE,
+  //   this.handleReceivePiine);
+
+  this.socket_.addEventListener(
+    piine.App.EventType.RECEIVE_PIINE, this.handleReceivePiine, false, this);
+
+  this.handler_.listen(
+      this.socket_,
+      socketio.Socket.EventType.ERROR,
+      this.handleServerError);
 };
 
 

@@ -45,6 +45,9 @@ socketio.Socket.SCRIPT_PATH = '/socket.io/socket.io.js';
  * @enum {string}
  */
 socketio.Socket.EventType = {
+  /** "load" is emitted when the socket was loaded. */
+  LOAD: 'LOAD',
+
   /** "connect" is emitted when the socket connected successfully. */
   CONNECT: 'connect',
 
@@ -295,6 +298,7 @@ socketio.Socket.prototype.handleScriptLoad_ = function() {
   }
 
   this.socket_ = io['connect'](this.serverAddr_);
+  this.dispatchEvent(socketio.Socket.EventType.LOAD);
 };
 
 
