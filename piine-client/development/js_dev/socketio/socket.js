@@ -102,11 +102,9 @@ socketio.Socket.prototype.addEventListener = function(type, handler,
   var wrapperMap = socketio.Socket.wrapperMap_;
   var wrapper;
 
-  console.log(type);
   if (!(type in wrapperMap)) {
     wrapper = wrapperMap[type] = this.createWrapper(type)
-    this.addCustomEventListener(type, wrapper)
-    console.log(wrapperMap);
+    this.addCustomEventListener_(type, wrapper)
   }
 
   goog.base(this, 'addEventListener', type, handler, opt_capture,
