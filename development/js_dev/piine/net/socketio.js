@@ -12,6 +12,7 @@ goog.provide('piine.net.SocketIo');
 goog.require('goog.Uri');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 
 
@@ -22,6 +23,8 @@ goog.require('goog.events.EventTarget');
  */
 piine.net.SocketIo = function() {
   goog.base(this);
+
+  this.handler_ = new goog.events.EventHandler(this);
 };
 goog.inherits(piine.net.SocketIo, goog.events.EventTarget);
 
@@ -124,42 +127,34 @@ piine.net.SocketIo.prototype.isOpen = function() {
  *
  * @param {string} url The URL to which to connect.
  */
-piine.net.SocketIo.prototype.open = function(serverAddr) {
-  this.importSocketIo(serverAddr);
-
-  var io = goog.global['io'];
-
-  if (!goog.isDefAndNotNull(io)) {
-    throw Error('Cannot find io: ' + io);
-  }
-  this.socket_ = io['connect'](serverAddr);
-
-  this.addCustomEventListener('connect', this.handleConnect_);
-  this.addCustomEventListener('disconnect', this.handleDisConnect_);
-  this.addCustomEventListener('connect_failed', this.handleConnectFailed_);
-  this.addCustomEventListener('error', this.handleError_);
-  this.addCustomEventListener('message', this.handleMessage_);
+piine.net.SocketIo.prototype.open = function(url) {
+  this.serverAddr_ = url;
+  this.importSocketIo();
 };
 
 
 /**
  * Imports client-side Socket.IO script.
  *
- * @param {string} serverAddr Server address.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  */
-piine.net.SocketIo.prototype.importSocketIo = function(serverAddr,
-    opt_domHelper) {
+piine.net.SocketIo.prototype.importSocketIo = function(opt_domHelper) {
   if (piine.net.SocketIo.imported_) {
+    this.handleScriptLoad();
     return;
   }
 
   var dom = opt_domHelper || goog.dom.getDomHelper();
-  var uriObj = goog.Uri.parse(serverAddr);
+  var uriObj = goog.Uri.parse(this.serverAddr_);
   uriObj.setPath(piine.net.SocketIo.SCRIPT_PATH);
 
-  var script = goog.dom.createDom('script', { 'src': uriObj.toString() });
-  dom.getDocument().body.appendChild(script)
+  var script = goog.dom.createDom('script', { 'src': uriObj.toString(),
+      'type': 'text/javascript' });
 
+  this.handler_.listen(script, goog.events.EventType.LOAD,
+      this.handleScriptLoad);
+
+  dom.getDocument().body.appendChild(script)
   piine.net.SocketIo.imported_ = true;
 };
 
@@ -245,6 +240,26 @@ piine.net.SocketIo.prototype.handleMessage_ = function(msg) {
 };
 
 
+/**
+ * Handles the event when fired client-side Socket.IO script was loaded.
+ */
+piine.net.SocketIo.prototype.handleScriptLoad = function() {
+  var io = goog.global['io'];
+
+  if (!goog.isDefAndNotNull(io)) {
+    throw Error('Cannot find io: ' + io);
+  }
+
+  this.socket_ = io['connect'](this.serverAddr_);
+
+  this.addCustomEventListener('connect', this.handleConnect_);
+  this.addCustomEventListener('disconnect', this.handleDisConnect_);
+  this.addCustomEventListener('connect_failed', this.handleConnectFailed_);
+  this.addCustomEventListener('error', this.handleError_);
+  this.addCustomEventListener('message', this.handleMessage_);
+};
+
+
 /** @override */
 piine.net.SocketIo.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
@@ -252,6 +267,8 @@ piine.net.SocketIo.prototype.disposeInternal = function() {
   if (this.isOpen()) {
     this.close();
   }
+
+  this.handler_.dispose();
 
   delete this.socket_;
 };

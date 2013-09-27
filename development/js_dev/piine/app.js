@@ -48,7 +48,7 @@ piine.App.VIEW_ID = 'piine-view';
  * @type {string}
  * @const
  */
-piine.App.SERVER_ADDRESS = 'http://localhost:8080/';
+piine.App.SERVER_ADDRESS = 'http://192.168.11.15:8080/';
 
 
 /**
