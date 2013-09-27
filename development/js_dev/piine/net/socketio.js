@@ -191,6 +191,7 @@ piine.net.SocketIo.prototype.dispatchEventOnServer = function(e) {
 
 
 /**
+ * Handles Socket.IO connect event.
  * @private
  */
 piine.net.SocketIo.prototype.handleConnect_ = function() {
@@ -199,6 +200,7 @@ piine.net.SocketIo.prototype.handleConnect_ = function() {
 
 
 /**
+ * Handles Socket.IO connect_failed event.
  * @private
  */
 piine.net.SocketIo.prototype.handleConnectFailed_ = function(reason) {
@@ -208,6 +210,7 @@ piine.net.SocketIo.prototype.handleConnectFailed_ = function(reason) {
 
 
 /**
+ * Handles Socket.IO disconnect event.
  * @private
  */
 piine.net.SocketIo.prototype.handleDisConnect_ = function(reason) {
@@ -217,6 +220,7 @@ piine.net.SocketIo.prototype.handleDisConnect_ = function(reason) {
 
 
 /**
+ * Handles Socket.IO error event.
  * @private
  */
 piine.net.SocketIo.prototype.handleError_ = function(reason) {
@@ -226,6 +230,7 @@ piine.net.SocketIo.prototype.handleError_ = function(reason) {
 
 
 /**
+ * Handles Socket.IO message event.
  * @private
  */
 piine.net.SocketIo.prototype.handleMessage_ = function(msg) {
