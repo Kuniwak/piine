@@ -2,4 +2,5 @@
 // Please do not edit.
 goog.addDependency('../../../../development/js_dev/main.js', ['main'], ['piine.App']);
 goog.addDependency('../../../../development/js_dev/piine/app.js', ['piine.App'], ['goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.net.WebSocket', 'piine.View']);
-goog.addDependency('../../../../development/js_dev/piine/view.js', ['piine.View'], ['goog.dom', 'goog.dom.classes', 'goog.fx.AnimationParallelQueue', 'goog.fx.dom.BgColorTransform', 'goog.style', 'goog.ui.Component']);
+goog.addDependency('../../../../development/js_dev/piine/fx/dom/textshadowanimation.js', ['piine.fx.dom.TextShadowAnimation'], ['goog.array', 'goog.fx.dom.PredefinedEffect']);
+goog.addDependency('../../../../development/js_dev/piine/view.js', ['piine.View'], ['goog.color', 'goog.dom', 'goog.dom.classes', 'goog.events.EventHandler', 'goog.fx.AnimationParallelQueue', 'goog.fx.dom.BgColorTransform', 'goog.fx.dom.ColorTransform', 'goog.style', 'goog.ui.Component', 'piine.fx.dom.TextShadowAnimation']);

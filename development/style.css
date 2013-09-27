@@ -25,14 +25,6 @@ a:focus {
 
 .piine-view {
   height: 100%;
-  background-color: hsl(0, 0%, 95%);
-  transition-property: background-color;
-  transition-duration: 0.2s;
-}
-
-
-.piine-view-light {
-  background-color: hsl(42, 57%, 58%);
 }
 
 
@@ -41,15 +33,7 @@ a:focus {
   font-family: 'Sansita One', cursive;
   font-size: 600%;
   text-align: center;
-  color: #ddd;
-  transition-property: color, text-shadow;
-  transition-duration: 0.2s;
-}
-
-
-.piine-btn-light {
-  color: #fff;
-  text-shadow: 0 0 10px hsla(0, 0%, 100%, 1);
+  cursor: default;
 }
 
 
@@ -58,7 +42,9 @@ a:focus {
   letter-spacing: 1px;
   font-family: 'Oxygen', sans-serif;
   text-align: center;
+  color: #000;
   opacity: 0.4;
+  cursor: default;
 }
 
 

@@ -23,9 +23,9 @@ goog.require('piine.View');
  * @extends {goog.events.EventTarget}
  */
 piine.App = function() {
-  this.createHandler();
-  this.createWebSocket();
-  this.createView();
+  this.handler_ = this.createHandler();
+  this.socket_ = this.createWebSocket();
+  this.view_ = this.createView();
 
   this.attachEvents();
 
@@ -36,6 +36,7 @@ goog.addSingletonGetter(piine.App);
 
 
 /**
+ * ID attribute for the piine view element.
  * @type {string}
  * @const
  */
@@ -43,6 +44,7 @@ piine.App.VIEW_ID = 'piine-view';
 
 
 /**
+ * View copoment for the app.
  * @type {goog.ui.Control}
  * @private
  */
@@ -50,6 +52,7 @@ piine.App.prototype.view_ = null;
 
 
 /**
+ * Web socket receiver for the app.
  * @type {goog.net.WebSocket}
  * @private
  */
@@ -57,6 +60,7 @@ piine.App.prototype.socket_ = null;
 
 
 /**
+ * Event handler for the app.
  * @type {goog.events.EventHandler}
  * @private
  */
@@ -64,30 +68,11 @@ piine.App.prototype.handler_ = null;
 
 
 /**
+ * Whether events are already attached.
  * @type {boolean}
  * @private
  */
 piine.App.prototype.attached_ = false;
-
-
-piine.App.prototype.attachEvents = function() {
-  var socketEvents = goog.net.WebSocket.EventType;
-
-  if (!this.attached_) {
-    this.handler_.listen(window, goog.events.EventType.UNLOAD, this.handleUnload);
-    this.handler_.listen(this.socket_, socketEvents.MESSAGE, this.handleServerResponse);
-    this.handler_.listen(this.socket_, socketEvents.ERROR, this.handleServerError);
-    this.attached_ = true;
-  }
-};
-
-
-piine.App.prototype.detachEvents = function() {
-  if (this.attached_) {
-    this.handler_.removeAll();
-    this.attached_ = false;
-  }
-};
 
 
 /** @override */
@@ -100,31 +85,61 @@ piine.App.prototype.disposeInternal = function() {
 
 
 /**
+ * Attaches all events.
+ */
+piine.App.prototype.attachEvents = function() {
+  var socketEvents = goog.net.WebSocket.EventType;
+
+  if (!this.attached_) {
+    this.handler_.listen(window, goog.events.EventType.UNLOAD, this.handleUnload);
+    this.handler_.listen(this.socket_, socketEvents.MESSAGE, this.handleServerResponse);
+    this.handler_.listen(this.socket_, socketEvents.ERROR, this.handleServerError);
+    this.attached_ = true;
+  }
+};
+
+
+/**
+ * Detaches all events.
+ */
+piine.App.prototype.detachEvents = function() {
+  if (this.attached_) {
+    this.handler_.removeAll();
+    this.attached_ = false;
+  }
+};
+
+
+/**
+ * Creates a view component.
  * @protected
  */
 piine.App.prototype.createView = function() {
-  this.view_ = new piine.View();
+  return new piine.View();
 };
 
 
 /**
+ * Creates a web socket receivert.
  * @protected
  */
 piine.App.prototype.createWebSocket = function() {
-  this.socket_ = new goog.net.WebSocket();
+  return new goog.net.WebSocket();
 };
 
 
 /**
+ * Creates an event handler.
  * @protected
  */
 piine.App.prototype.createHandler = function() {
-  this.handler_ = new goog.events.EventHandler(this);
+  return new goog.events.EventHandler(this);
 };
 
 
 /**
- * @param {goog.events.Event} e The event.
+ * Handles an unload event.
+ * @param {goog.events.Event} e The event to handle.
  * @protected
  */
 piine.App.prototype.handleUnload = function(e) {
@@ -133,11 +148,12 @@ piine.App.prototype.handleUnload = function(e) {
 
 
 /**
- * @param {goog.net.WebSocket.MessageEvent} e The event.
+ * Handles a server response.
+ * @param {goog.net.WebSocket.MessageEvent} e The event to handle.
  * @protected
  */
 piine.App.prototype.handleServerResponse = function(e) {
-  this.view_.blink();
+  this.view_react();
 };
 
 
