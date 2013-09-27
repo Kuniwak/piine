@@ -46,15 +46,13 @@ piine.fx.dom.TextShadowAnimation.prototype.setStyle = function() {
     coordsAsInts[i] = Math.round(this.coords[i]) + 'px';
   }
 
-  var colorArray = Array(4);
+  var colorArray = Array(3);
   for (; i < 6; i++) {
     colorArray[i - 3] = Math.round(this.coords[i]);
   }
 
-  colorArray[3] = this.coords[6];
-
   this.element.style.textShadow = coordsAsInts.join(' ') + ' rgba(' +
-      colorArray.join(',') + ')';
+      colorArray.join(',') + ',' + (this.coords[6] / 255) + ')';
 };
 
 
@@ -116,6 +114,18 @@ piine.fx.dom.TextShadowAnimation.Values.prototype.rgbaArray = null;
  * @return {Array.<number>} Coords array for Textshadowanimation arguments.
  */
 piine.fx.dom.TextShadowAnimation.Values.prototype.toCoords = function() {
-  return goog.array.concat([this.offsetX, this.offsetY, this.blurRadius],
-      this.rgbaArray);
+  var rgbaArray = [];
+
+  for (var i = 0; i < 3; i++) {
+    rgbaArray[i] = Math.round(this.rgbaArray[i]);
+  }
+
+  // For reason of perfoemance, int array is better than double array.
+  rgbaArray[3] = Math.round(this.rgbaArray[3] * 255);
+
+  return goog.array.concat([
+      Math.round(this.offsetX),
+      Math.round(this.offsetY),
+      Math.round(this.blurRadius)],
+      rgbaArray);
 };
