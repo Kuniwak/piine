@@ -54,6 +54,15 @@ piine.View.VIEW_CLASS_NAME = goog.getCssName('piine-view');
 
 
 /**
+ * Event type for the view.
+ * @enum {string}
+ */
+piine.View.EventType = {
+  PIINE: 'piine'
+};
+
+
+/**
  * Background color fir a piine reaction.
  * @enum {Array.<number>}
  */
@@ -214,6 +223,7 @@ piine.View.prototype.react = function() {
  * @param {goog.events.Event} e The event to handle.
  */
 piine.View.prototype.handleTouchStart = function(e) {
+  this.dispatchEvent(piine.View.EventType.PIINE);
   this.react();
   e.preventDefault();
   e.stopPropagation();

@@ -12,7 +12,7 @@ goog.provide('piine.App');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
-goog.require('goog.net.WebSocket');
+goog.require('piine.net.SocketIo');
 goog.require('piine.View');
 
 
@@ -41,6 +41,14 @@ goog.addSingletonGetter(piine.App);
  * @const
  */
 piine.App.VIEW_ID = 'piine-view';
+
+
+/**
+ * IP address of the Socket.IO server.
+ * @type {string}
+ * @const
+ */
+piine.App.SERVER_ADDRESS = 'http://localhost:8080/';
 
 
 /**
@@ -88,12 +96,14 @@ piine.App.prototype.disposeInternal = function() {
  * Attaches all events.
  */
 piine.App.prototype.attachEvents = function() {
-  var socketEvents = goog.net.WebSocket.EventType;
+  var socketEvents = piine.net.SocketIo.EventType;
 
   if (!this.attached_) {
     this.handler_.listen(window, goog.events.EventType.UNLOAD, this.handleUnload);
     this.handler_.listen(this.socket_, socketEvents.MESSAGE, this.handleServerResponse);
     this.handler_.listen(this.socket_, socketEvents.ERROR, this.handleServerError);
+    this.handler_.listen(this.view_, piine.View.EventType.PIINE, this.handlePiine);
+    this.socket_.open(piine.App.SERVER_ADDRESS);
     this.attached_ = true;
   }
 };
@@ -124,7 +134,7 @@ piine.App.prototype.createView = function() {
  * @protected
  */
 piine.App.prototype.createWebSocket = function() {
-  return new goog.net.WebSocket();
+  return new piine.net.SocketIo();
 };
 
 
@@ -154,6 +164,14 @@ piine.App.prototype.handleUnload = function(e) {
  */
 piine.App.prototype.handleServerResponse = function(e) {
   this.view_react();
+};
+
+
+/**
+ * Handles a piine event.
+ */
+piine.App.prototype.handlePiine = function() {
+  this.socket_.send('piine!');
 };
 
 
