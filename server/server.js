@@ -3,10 +3,15 @@
 
 var io = require('socket.io').listen(8080);
 
+var userCounter = 0;
+
 io.sockets.on('connection', function (socket) {
-  console.log('connection');
-  socket.on('message', function (msg) {
-    console.log('piine!', msg);
-    socket.volatile.broadcast.send('piine!');
+  userCounter++;
+
+  socket.on('send_piine', function () {
+    console.log('piine!');
+    socket.volatile.broadcast.emit('receive_piine');
   });
+
+  socket.emit('change_user_count', userCounter);
 });

@@ -52,6 +52,16 @@ piine.App.SERVER_ADDRESS = 'http://192.168.11.15:8080/';
 
 
 /**
+ * Event type string for the app.
+ * @enum {string}
+ */
+piine.App.EventType = {
+  SEND_PIINE: 'send_piine',
+  RECEIVE_PIINE: 'receive_piine'
+};
+
+
+/**
  * View copoment for the app.
  * @type {goog.ui.Control}
  * @private
@@ -96,13 +106,27 @@ piine.App.prototype.disposeInternal = function() {
  * Attaches all events.
  */
 piine.App.prototype.attachEvents = function() {
-  var socketEvents = socketio.Socket.EventType;
-
   if (!this.attached_) {
-    this.handler_.listen(window, goog.events.EventType.UNLOAD, this.handleUnload);
-    this.handler_.listen(this.socket_, socketEvents.MESSAGE, this.handleServerResponse);
-    this.handler_.listen(this.socket_, socketEvents.ERROR, this.handleServerError);
-    this.handler_.listen(this.view_, piine.View.EventType.PIINE, this.handlePiine);
+    this.handler_.listen(
+        window,
+        goog.events.EventType.UNLOAD,
+        this.handleUnload);
+
+    this.handler_.listen(
+       this.socket_,
+       piine.App.EventType.RECEIVE_PIINE,
+       this.handleReceivePiine);
+
+    this.handler_.listen(
+        this.socket_,
+        socketio.Socket.EventType.ERROR,
+        this.handleServerError);
+
+    this.handler_.listen(
+        this.view_,
+        piine.View.EventType.PIINE,
+        this.handlePiineFromView);
+
     this.socket_.open(piine.App.SERVER_ADDRESS);
     this.attached_ = true;
   }
@@ -148,6 +172,23 @@ piine.App.prototype.createHandler = function() {
 
 
 /**
+ * Renders the view.
+ */
+piine.App.prototype.render = function() {
+  var viewElem = goog.dom.getElement(piine.App.VIEW_ID);
+  this.view_.decorate(viewElem);
+};
+
+
+/**
+ * Send piine to sever.
+ */
+piine.App.prototype.sendPiine = function() {
+  this.socket_.dispatchEventOnServer(piine.App.EventType.SEND_PIINE);
+};
+
+
+/**
  * Handles an unload event.
  * @param {goog.events.Event} e The event to handle.
  * @protected
@@ -162,7 +203,7 @@ piine.App.prototype.handleUnload = function(e) {
  * @param {goog.net.WebSocket.MessageEvent} e The event to handle.
  * @protected
  */
-piine.App.prototype.handleServerResponse = function(e) {
+piine.App.prototype.handleReceivePiine = function(e) {
   this.view_.react();
 };
 
@@ -170,15 +211,6 @@ piine.App.prototype.handleServerResponse = function(e) {
 /**
  * Handles a piine event.
  */
-piine.App.prototype.handlePiine = function() {
-  this.socket_.send('piine!');
-};
-
-
-/**
- * Renders the view.
- */
-piine.App.prototype.render = function() {
-  var viewElem = goog.dom.getElement(piine.App.VIEW_ID);
-  this.view_.decorate(viewElem);
+piine.App.prototype.handlePiineFromView = function() {
+  this.sendPiine();
 };
