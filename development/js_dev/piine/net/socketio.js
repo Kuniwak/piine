@@ -234,8 +234,7 @@ piine.net.SocketIo.prototype.handleError_ = function(reason) {
  * @private
  */
 piine.net.SocketIo.prototype.handleMessage_ = function(msg) {
-  console.log('msg', msg);
-  this.dispatchEvent({ type: piine.net.SocketIo.EventType.ERROR,
+  this.dispatchEvent({ type: piine.net.SocketIo.EventType.MESSAGE,
       message: msg });
 };
 

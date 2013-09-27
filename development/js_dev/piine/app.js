@@ -163,7 +163,7 @@ piine.App.prototype.handleUnload = function(e) {
  * @protected
  */
 piine.App.prototype.handleServerResponse = function(e) {
-  this.view_react();
+  this.view_.react();
 };
 
 
