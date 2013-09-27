@@ -127,7 +127,12 @@ piine.net.SocketIo.prototype.isOpen = function() {
 piine.net.SocketIo.prototype.open = function(serverAddr) {
   this.importSocketIo(serverAddr);
 
-  this.socket_ = goog.global['io']['connect'](serverAddr);
+  var io = goog.global['io'];
+
+  if (!goog.isDefAndNotNull(io)) {
+    throw Error('Cannot find io: ' + io);
+  }
+  this.socket_ = io['connect'](serverAddr);
 
   this.addCustomEventListener('connect', this.handleConnect_);
   this.addCustomEventListener('disconnect', this.handleDisConnect_);
