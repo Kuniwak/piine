@@ -3,7 +3,7 @@
 
 
 /**
- * @fileoverview A web app class for the 'piine'.
+ * @fileoverview A web app class for the piine.
  * @author orga.chem.job@gmail.com (OrgaChem)
  */
 
@@ -12,13 +12,13 @@ goog.provide('piine.App');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
-goog.require('piine.net.SocketIo');
+goog.require('socketio.Socket');
 goog.require('piine.View');
 
 
 
 /**
- * A web app class for the 'piine'.
+ * A web app class for the piine.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
@@ -96,7 +96,7 @@ piine.App.prototype.disposeInternal = function() {
  * Attaches all events.
  */
 piine.App.prototype.attachEvents = function() {
-  var socketEvents = piine.net.SocketIo.EventType;
+  var socketEvents = socketio.Socket.EventType;
 
   if (!this.attached_) {
     this.handler_.listen(window, goog.events.EventType.UNLOAD, this.handleUnload);
@@ -134,7 +134,7 @@ piine.App.prototype.createView = function() {
  * @protected
  */
 piine.App.prototype.createWebSocket = function() {
-  return new piine.net.SocketIo();
+  return new socketio.Socket();
 };
 
 
