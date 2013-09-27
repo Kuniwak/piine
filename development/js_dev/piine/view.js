@@ -105,7 +105,7 @@ piine.View.TextShadowValue = {
  * @type {number}
  * @const
  */
-piine.View.REACTION_DURATION = 200;;
+piine.View.REACTION_DURATION = 400;;
 
 
 /**
