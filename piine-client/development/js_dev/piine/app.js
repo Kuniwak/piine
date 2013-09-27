@@ -189,14 +189,10 @@ piine.App.prototype.sendPiine = function() {
  * @protected
  */
 piine.App.prototype.handleLoad = function() {
-  // TODO: The listener was set by EventHandler does not work by unknown cause.
   this.handler_.listen(
      this.socket_,
      piine.App.EventType.RECEIVE_PIINE,
      this.handleReceivePiine);
-
-  //this.socket_.addEventListener(
-  //  piine.App.EventType.RECEIVE_PIINE, this.handleReceivePiine, false, this);
 
   this.handler_.listen(
       this.socket_,
