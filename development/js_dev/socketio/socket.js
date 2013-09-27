@@ -257,8 +257,21 @@ socketio.Socket.prototype.send = function(message) {
  * @param {{type: string, data: *}} e The event to dispatch.
  */
 socketio.Socket.prototype.dispatchEventOnServer = function(e) {
+  var type, data;
+
+  if (goog.isString(e)) {
+    type = e;
+    data = null;
+  }
+  else {
+    type = e.type;
+    data = e.data;
+  }
+
+  goog.asserts.assertString(type);
+
   this.assertSocketExists_();
-  this.socket_['emit'](e.type, e.data);
+  this.socket_['emit'](type, data);
 };
 
 
