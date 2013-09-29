@@ -1,10 +1,25 @@
-# piine
-
+piine
+=====
 piine provides Real-Time Feedback during your presentation.
 
-## Snapshots
 
-## How to use
+Snapshots
+---------
+
+### piine client
+Audience can feedback to a speaker by touching own device.
+
+![snapshot of piine client](http://orgachem.github.io/piine/images/snapshot-client.png)
+
+
+### piine viewer
+You can display piine viewer by a projector.  piine viewer shows: who gets interested or excited **now**, how many user was joined.
+
+![snapshot of piine viewer](http://orgachem.github.io/piine/images/snapshot-viewer.png)
+
+
+How to use
+----------
 
 ### Preparing
 
@@ -53,6 +68,7 @@ piine provides Real-Time Feedback during your presentation.
 
     Sleep "piine" server by `Ctrl+C` on your server.
 
+
 ### Presentation
 
 1. Connect to a Projector
@@ -80,7 +96,9 @@ piine provides Real-Time Feedback during your presentation.
 
     > Please touch "piine!" at any time when you get excited or interested my speech!
 
-## Special thanks
+
+Special thanks
+--------------
 
  * Development tool
    * [cocopon](https://github.com/cocopon)
