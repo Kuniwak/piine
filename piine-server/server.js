@@ -1,7 +1,7 @@
 // This script licensed under the MIT.
 // http://orgachem.mit-license.org
 
-var io = require('socket.io').listen(3333);
+var io = require('socket.io').listen(8888);
 io.set('log level', 1);
 
 var userCounter = 0;
