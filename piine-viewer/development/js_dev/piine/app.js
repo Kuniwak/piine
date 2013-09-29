@@ -3,7 +3,7 @@
 
 
 /**
- * @fileoverview A web app class for the piine.
+ * @fileoverview A web app class for the piine viewer.
  * @author orga.chem.job@gmail.com (OrgaChem)
  */
 
@@ -23,6 +23,7 @@ goog.require('piine.View');
  * @extends {goog.events.EventTarget}
  */
 piine.App = function() {
+  goog.base(this);
   this.handler_ = this.createHandler();
   this.socket_ = this.createWebSocket();
   this.view_ = this.createView();
@@ -56,8 +57,9 @@ piine.App.SERVER_ADDRESS = 'http://192.168.11.15:8080/';
  * @enum {string}
  */
 piine.App.EventType = {
-  SEND_PIINE: 'send_piine',
-  RECEIVE_PIINE: 'receive_piine'
+  RECEIVE_PIINE: 'receive_piine',
+  LEAVE: 'leave',
+  JOIN: 'join'
 };
 
 
@@ -112,20 +114,10 @@ piine.App.prototype.attachEvents = function() {
         goog.events.EventType.UNLOAD,
         this.handleUnload);
 
-    this.handler_.listen(
-       this.socket_,
-       piine.App.EventType.RECEIVE_PIINE,
-       this.handleReceivePiine);
-
-    this.handler_.listen(
+    this.handler_.listenOnce(
         this.socket_,
-        socketio.Socket.EventType.ERROR,
-        this.handleServerError);
-
-    this.handler_.listen(
-        this.view_,
-        piine.View.EventType.PIINE,
-        this.handlePiineFromView);
+        socketio.Socket.EventType.LOAD,
+        this.handleLoad);
 
     this.socket_.open(piine.App.SERVER_ADDRESS);
     this.attached_ = true;
@@ -181,10 +173,24 @@ piine.App.prototype.render = function() {
 
 
 /**
- * Send piine to sever.
+ * Handles an load event.
+ * @protected
  */
-piine.App.prototype.sendPiine = function() {
-  this.socket_.dispatchEventOnServer(piine.App.EventType.SEND_PIINE);
+piine.App.prototype.handleLoad = function() {
+  this.handler_.listen(
+     this.socket_,
+     piine.App.EventType.RECEIVE_PIINE,
+     this.handleReceivePiine);
+
+  this.handler_.listen(
+     this.socket_,
+     piine.App.EventType.LEAVE,
+     this.handleLeave);
+
+  this.handler_.listen(
+     this.socket_,
+     piine.App.EventType.JOIN,
+     this.handleJoin);
 };
 
 
@@ -200,17 +206,28 @@ piine.App.prototype.handleUnload = function(e) {
 
 /**
  * Handles a server response.
- * @param {goog.net.WebSocket.MessageEvent} e The event to handle.
+ * @param {Object} e The event to handle.
  * @protected
  */
-piine.App.prototype.handleReceivePiine = function(e) {
-  this.view_.react();
+piine.App.prototype.handleJoin = function(e) {
+  this.view_.addUser(e.data[0]);
 };
 
 
 /**
- * Handles a piine event.
+ * Handles a server response.
+ * @param {Object} e The event to handle.
+ * @protected
  */
-piine.App.prototype.handlePiineFromView = function() {
-  this.sendPiine();
+piine.App.prototype.handleLeave = function(e) {
+  this.view_.removeUser(e.data[0]);
+};
+
+
+/**
+ * Handles a server response.
+ * @protected
+ */
+piine.App.prototype.handleReceivePiine = function(e) {
+  this.view_.reactUser(e.data[0]);
 };

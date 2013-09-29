@@ -1,4 +1,5 @@
 html, body {
+  min-height: 600px;
   height: 100%;
   margin: 0;
 }
@@ -26,15 +27,19 @@ a:focus {
 
 .piine-view {
   height: 100%;
-  background: url(../img/piine-bg.png) center center no-repeat;
+  margin: 0 auto;
 }
 
 
-.info {
+.piine-container {
   position: absolute;
+  top: 45%;
   width: 100%;
+}
 
-  bottom: 0;
+
+.piine-info {
+  margin: 0;
   letter-spacing: 1px;
   font-family: 'Oxygen', sans-serif;
   text-align: center;
@@ -44,7 +49,16 @@ a:focus {
 }
 
 
-img.profile-icon {
+.piine-logo {
+  margin: 0;
+  font-family: 'Sansita One', cursive;
+  font-size: 600%;
+  text-align: center;
+  cursor: default;
+}
+
+
+img.piine-profile-icon {
   width: 14px;
   height: 14px;
   vertical-align: middle;

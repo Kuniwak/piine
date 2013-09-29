@@ -38,7 +38,7 @@ a:focus {
 }
 
 
-.info {
+.piine-info {
   position: absolute;
   width: 100%;
 
@@ -52,7 +52,7 @@ a:focus {
 }
 
 
-img.profile-icon {
+img.piine-profile-icon {
   width: 14px;
   height: 14px;
   vertical-align: middle;
