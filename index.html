@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Piine : &quot;piine&quot; is a web app that provides real-time feedback during your presentation." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Piine</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/OrgaChem/piine">View on GitHub</a>
+
+          <h1 id="project_title">Piine</h1>
+          <h2 id="project_tagline">&quot;piine&quot; is a web app that provides real-time feedback during your presentation.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/OrgaChem/piine/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/OrgaChem/piine/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="piine" class="anchor" href="#piine"><span class="octicon octicon-link"></span></a>piine</h1>
+
+<p>piine provides Real-Time Feedback during your presentation.</p>
+
+<h2>
+<a name="snapshots" class="anchor" href="#snapshots"><span class="octicon octicon-link"></span></a>Snapshots</h2>
+
+<h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
+
+<h3>
+<a name="preparing" class="anchor" href="#preparing"><span class="octicon octicon-link"></span></a>Preparing</h3>
+
+<ol>
+<li>
+<p>Setup Closure tools</p>
+
+<p>Enter following commands in the terminal:</p>
+
+<pre><code>(in `piine` directory)
+$ python piine-client/tools/setup.py
+$ python piine-viewer/tools/setup.py
+$ cd piine-server
+$ npm install socket.io
+</code></pre>
+</li>
+<li>
+<p>Modify Server Addresses</p>
+
+<p>Modify server assress and port in <code>piine-client/development/js_dev/piine/app.js:52</code>, <code>piine-client/development/js_dev/piine/app.js:52</code>, <code>piine-server/server.js:4</code>.</p>
+</li>
+<li>
+<p>Compile</p>
+
+<p>Enter following commands in the terminal:</p>
+
+<pre><code>(in `piine` directory)
+$ python piine-client/tools/compile.py
+$ python piine-viewer/tools/compile.py
+</code></pre>
+</li>
+<li>
+<p>Deploy</p>
+
+<p>Deploy <code>piine-client/production</code> and <code>piine-viewer/production</code> on your web server.</p>
+</li>
+<li>
+<p>Start on Your Server</p>
+
+<p>Enter following commands in the terminal:</p>
+
+<pre><code>(in `piine` directory)
+$ node piine-server/server.js
+</code></pre>
+</li>
+<li>
+<p>Operation Check</p>
+
+<p>Open <code>piine-viewer/production</code> (called "pione" viewer) on your PC (because "piine" viewer requires a high-performance device).</p>
+
+<p>Next, open <code>piine-client/production</code> (called "piine" client) on another tab/window or your device.</p>
+
+<p>Next, click/touch your device.</p>
+</li>
+<li>
+<p>Sleep "piine" Server</p>
+
+<p>Sleep "piine" server by <code>Ctrl+C</code> on your server.</p>
+</li>
+</ol><h3>
+<a name="presentation" class="anchor" href="#presentation"><span class="octicon octicon-link"></span></a>Presentation</h3>
+
+<ol>
+<li>
+<p>Connect to a Projector</p>
+
+<p>Connect your device to projector.</p>
+</li>
+<li>
+<p>Start "piine" Server</p>
+
+<p>Enter following commands in the terminal:</p>
+
+<pre><code>(in `piine` directory)
+$ node piine-server/server.js
+</code></pre>
+</li>
+<li>
+<p>Open "piine" Viewer on Your Device</p>
+
+<p>Open "piine" viewer on your device that was connected to the projector.</p>
+</li>
+<li>
+<p>Get Audience to join "piine"</p>
+
+<p>Get audience to open "piine" client on own devices.</p>
+</li>
+<li>
+<p>Lecture how-to-use "piine" to audience</p>
+
+<p>Say:</p>
+
+<blockquote>
+<p>Please touch "piine!" at any time when you get excited or interested my speech!</p>
+</blockquote>
+</li>
+</ol><h2>
+<a name="special-thanks" class="anchor" href="#special-thanks"><span class="octicon octicon-link"></span></a>Special thanks</h2>
+
+<ul>
+<li>
+<p>Development tool</p>
+
+<ul>
+<li>
+<p><a href="https://github.com/cocopon">cocopon</a></p>
+
+<p><a href="https://github.com/cocopon/goog-starter-kit">goog-starter-kit</a> licensed under MIT license.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Font</p>
+
+<ul>
+<li>
+<p><a href="https://plus.google.com/115141460305554867239/about">Omnibus-Type</a></p>
+
+<p><a href="http://www.google.com/fonts/specimen/Sansita+One">Sansita One</a> licensed under <a href="http://scripts.sil.org/OFL">SIL Open Font License, 1.1</a>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Concept of the real-time feedback system for a presentation</p>
+
+<ul>
+<li><a href="https://twitter.com/Shumpei">Shumpei Shiraishi</a></li>
+</ul>
+</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Piine maintained by <a href="https://github.com/OrgaChem">OrgaChem</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
