@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Closure Unit Tests - piine.Viewer</title>
+  <script type="text/javascript" src="../../../../../closure/library/closure/goog/base.js"></script><!--@base_js@-->
+  <script type="text/javascript" src="../../../deps.js"></script><!--@deps_js@-->
+  <script type="text/javascript"> goog.require('goog.testing.jsunit'); </script>
+</head>
+<body>
+  <div id="piine-view" class="piine-view">
+    <div id="piine-btn" class="piine-btn">piine!</div>
+    <p class="info">produced by <a title="contact to me on twitter" href="https://twitter.com/orga_chem"><img class="profile-icon" src="../../img/orgachem.png" alt="orga_chem"></a></p>
+  </div>
+  <script type="text/javascript">
+    goog.require('piine.graph.math');
+  </script>
+  <script type="text/javascript">
+    var e = 1e-15;
+
+    function testAngleDifference() {
+      assertRoughlyEquals(0.1, piine.graph.math.angleDifference(0.1, 0.2), e);
+      assertRoughlyEquals(-0.1, piine.graph.math.angleDifference(0.2, 0.1), e);
+      assertRoughlyEquals(0, piine.graph.math.angleDifference(0, 1), e);
+      assertRoughlyEquals(0, piine.graph.math.angleDifference(1, 0), e);
+      assertRoughlyEquals(0.1, piine.graph.math.angleDifference(1, 2.1), e);
+      assertRoughlyEquals(0.5, piine.graph.math.angleDifference(-0.5, 0), e);
+      assertRoughlyEquals(0.5, piine.graph.math.angleDifference(0.5, 0), e);
+      assertRoughlyEquals(0.1, piine.graph.math.angleDifference(-0.3, -0.2), e);
+    }
+
+    function testStandardAngle() {
+      assertRoughlyEquals(0.99, piine.graph.math.standardAngle(-1.01), e);
+      assertRoughlyEquals(0, piine.graph.math.standardAngle(-1), e);
+      assertRoughlyEquals(0.99, piine.graph.math.standardAngle(-0.01), e);
+      assertRoughlyEquals(0, piine.graph.math.standardAngle(0), e);
+      assertRoughlyEquals(0.5, piine.graph.math.standardAngle(0.5), e);
+      assertRoughlyEquals(0, piine.graph.math.standardAngle(1), e);
+      assertRoughlyEquals(0.1, piine.graph.math.standardAngle(2.1), e);
+    }
+
+    function testSupplementaryAngle() {
+      assertRoughlyEquals(0, piine.graph.math.supplementaryAngle(0.5), e);
+      assertRoughlyEquals(0, piine.graph.math.supplementaryAngle(-0.5), e);
+      assertRoughlyEquals(0.9, piine.graph.math.supplementaryAngle(-0.6), e);
+      assertRoughlyEquals(0.9, piine.graph.math.supplementaryAngle(0.4), e);
+      assertRoughlyEquals(0.5, piine.graph.math.supplementaryAngle(0), e);
+    }
+
+    function testCenterAngle() {
+      assertRoughlyEquals(0.25, piine.graph.math.centerAngle(0, 0.5), e);
+      assertRoughlyEquals(0.75, piine.graph.math.centerAngle(0, 0.5, true), e);
+      assertRoughlyEquals(0.25, piine.graph.math.centerAngle(1, 0.5), e);
+      assertRoughlyEquals(0.75, piine.graph.math.centerAngle(1, 0.5, true), e);
+    }
+  </script>
+</body>
+</html>

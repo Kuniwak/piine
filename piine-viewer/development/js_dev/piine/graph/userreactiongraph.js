@@ -13,12 +13,14 @@ goog.provide('piine.graph.UserReactionGraph');
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.math.Coordinate');
+goog.require('goog.asserts');
+goog.require('goog.math');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 goog.require('goog.ui.Component');
 goog.require('piine.graph.fx.ReactionEffect');
+goog.require('piine.graph.math');
 
 
 
@@ -82,7 +84,10 @@ piine.graph.UserReactionGraph.REFRESH_RATE = 33;
 piine.graph.UserReactionGraph.COLOR = 'rgb(209, 173, 89)';
 
 
-piine.graph.UserReactionGraph.USER_NODE_RADIUS = 5;
+piine.graph.UserReactionGraph.MAX_ANGLE_RATE = 0.25;
+
+
+piine.graph.UserReactionGraph.USER_NODE_RADIUS = 6;
 
 
 piine.graph.UserReactionGraph.ORBITAAL_RADIUS = 250;
@@ -106,13 +111,13 @@ piine.graph.UserReactionGraph.OUTER_CIRCLE_LINE_WIDTH = 4;
 piine.graph.UserReactionGraph.INNER_CIRCLE_LINE_WIDTH = 1;
 
 
-piine.graph.UserReactionGraph.INITIAL_ANGLE_RATE = 0.001;
-
-
 piine.graph.UserReactionGraph.WIDTH = 800;
 
 
 piine.graph.UserReactionGraph.HEIGHT = 600;
+
+
+piine.graph.UserReactionGraph.MAX_USER_COUNT = 100;
 
 
 /**
@@ -126,11 +131,72 @@ piine.graph.UserReactionGraph.prototype.handleTick = function() {
 
 
 /**
+ * Returns average of angle rates.
+ * @return {number} Average of angle rates.
+ */
+piine.graph.UserReactionGraph.prototype.getAngleRateAverage = function() {
+  var count = this.usersMap_.getCount();
+  var sum = 0;
+  goog.structs.forEach(this.usersMap_, function(user) {
+    sum += Math.abs(user.angleRate);
+  });
+
+  return count > 1 ?  sum / count : 0;
+};
+
+
+/**
+ * Returns digit for the average of angle rates.
+ * @return {number} Digit number for the average of angle rates.
+ */
+piine.graph.UserReactionGraph.prototype.getAngleRateAverageOrder = function() {
+  var avg = this.getAngleRateAverage();
+  return avg > 0 ? Math.floor(Math.log(avg) / Math.log(10)) + 1 : NaN;
+};
+
+
+/**
  * Adds an user by the specified user ID.
  * @param {string} userId User ID for the user to react.
  */
 piine.graph.UserReactionGraph.prototype.addUser = function(userId) {
-  this.usersMap_.set(userId, new piine.graph.UserReactionGraph.UserNode(userId, this));
+  var userCount = this.usersMap_.getCount();
+  if (userCount >= piine.graph.UserReactionGraph.MAX_USER_COUNT) {
+    console.log('Too many users!');
+    return;
+  }
+
+  var user = new piine.graph.UserReactionGraph.UserNode(userId, this);
+
+  if (userCount === 1) {
+    user.angle = piine.graph.math.supplementaryAngle(
+        this.usersMap_.getValues()[0].angle);
+  }
+  else if (userCount > 1) {
+    var angles = [];
+    goog.structs.forEach(this.usersMap_, function(user) {
+      angles.push(user.angle);
+    });
+
+    goog.array.sort(angles);
+
+    var maxDist = Number.MIN_VALUE;
+    var dist = 0;
+    var center = 0;
+
+    for (var i = 1; i < userCount; i++) {
+      dist = piine.graph.math.angleDifference(angles[i - 1], angles[i]);
+      if (Math.abs(dist) > maxDist) {
+        maxDist = dist;
+        center = piine.graph.math.centerAngle(angles[i - 1], angles[i]);
+      }
+    }
+
+    user.angle = center;
+  }
+
+
+  this.usersMap_.set(userId, user);
 };
 
 
@@ -166,20 +232,11 @@ piine.graph.UserReactionGraph.prototype.reallocate = function() {
   goog.structs.forEach(this.usersMap_, function(user, userId) {
 
     // Caulurates for each torque.
-    user.torque = - piine.graph.UserReactionGraph.FRICTION_COEFFICIENT * user.angleRate;
+    user.torque = -piine.graph.UserReactionGraph.FRICTION_COEFFICIENT * user.angleRate;
     goog.structs.forEach(this.usersMap_, function(other, otherId) {
       if (userId !== otherId) {
-        var dtheta = other.angle - user.angle;
+        var dtheta = piine.graph.math.angleDifference(user.angle, other.angle);
         var df;
-
-        var $before = dtheta;
-
-        if (dtheta > 0.5) {
-          dtheta = dtheta - 1;
-        }
-        else if (dtheta < -0.5) {
-          dtheta = 1 + dtheta;
-        }
 
         df = dtheta === 0 ? 0 :
             piine.graph.UserReactionGraph.REPULSION_COEFFICIENT / dtheta;
@@ -191,9 +248,14 @@ piine.graph.UserReactionGraph.prototype.reallocate = function() {
 
   // Caulurates for each angle rate and angle.
   goog.structs.forEach(this.usersMap_, function(user, userId) {
-    user.angleRate += user.torque;
-    user.angle += user.angleRate + piine.graph.UserReactionGraph.CLOCKWISE_WIND;
-    user.angle -= Math.floor(user.angle);
+    user.angleRate = goog.math.clamp(
+        user.angleRate + user.torque,
+        -piine.graph.UserReactionGraph.MAX_ANGLE_RATE,
+        piine.graph.UserReactionGraph.MAX_ANGLE_RATE);
+
+    user.angle = piine.graph.math.standardAngle(
+      user.angle + user.angleRate + piine.graph.UserReactionGraph.CLOCKWISE_WIND);
+
   }, this);
 };
 
@@ -344,7 +406,7 @@ piine.graph.UserReactionGraph.UserNode = function(userId, graph) {
   this.userId = userId;
 
   this.angle = 0;
-  this.angleRate = piine.graph.UserReactionGraph.INITIAL_ANGLE_RATE;
+  this.angleRate = 0;
   this.torque = 0;
 
   this.radius = piine.graph.UserReactionGraph.USER_NODE_RADIUS;
@@ -384,6 +446,7 @@ piine.graph.UserReactionGraph.UserNode.prototype.torque;
  * Updates the user node coordinates.
  */
 piine.graph.UserReactionGraph.UserNode.prototype.updateCoords = function() {
+  goog.asserts.assert(!Number.isNaN(this.angle));
   this.coords[0] = piine.graph.UserReactionGraph.WIDTH / 2 + piine.graph.UserReactionGraph.ORBITAAL_RADIUS * Math.sin(PI2 * this.angle);
   this.coords[1] = piine.graph.UserReactionGraph.HEIGHT / 2 - piine.graph.UserReactionGraph.ORBITAAL_RADIUS * Math.cos(PI2 * this.angle);
 };
@@ -396,7 +459,6 @@ piine.graph.UserReactionGraph.UserNode.prototype.updateCoords = function() {
  */
 piine.graph.UserReactionGraph.UserNode.prototype.render = function(ctx) {
   this.updateCoords();
-
   ctx.beginPath();
   ctx.fillStyle = piine.graph.UserReactionGraph.COLOR;
   ctx.arc(this.coords[0], this.coords[1], this.radius, 0, PI2, false);
