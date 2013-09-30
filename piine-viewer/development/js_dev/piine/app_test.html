@@ -16,7 +16,6 @@
     </div>
   </div>
   <script type="text/javascript">
-    goog.require('goog.testing.asserts');
     goog.require('goog.async.Deferred');
     goog.require('goog.events.EventHandler');
     goog.require('goog.structs');
@@ -73,14 +72,13 @@
         var socket = new socketio.Socket();
 
         handler.listen(socket, socketio.Socket.EventType.LOAD, function() {
-          socket.open(piine.App.SERVER_ADDRES);
-        });
-        handler.listen(socket, socketio.Socket.EventType.CONNECT, function() {
           setTimeout(function() {
             console.log('Reimained: ' + --count);
             socketAsync.callback();
           }, MAX_INTERVAL * Math.random());
         });
+
+        socket.open(piine.App.SERVER_ADDRES);
         socketSet.add(socket);
         return socketAsync;
       };
@@ -88,7 +86,7 @@
       function finalize() {
         handler.dispose();
         goog.structs.forEach(socketSet, function(socket) {
-          socket.disconnect();
+          socket.close();
         });
       }
 
@@ -99,7 +97,7 @@
       });
       triesAsync.addErrback(function() {
         finalize();
-        goog.testing.asserts.raiseException('ASSERTION_FAILED', 'Error has been raised on the tries.');
+        fail('Error has been raised on the tries.');
       });
     };
   </script>
