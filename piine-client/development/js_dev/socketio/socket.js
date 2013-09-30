@@ -40,7 +40,7 @@ socketio.Socket.SCRIPT_PATH = '/socket.io/socket.io.js';
 
 
 /**
- * Event type fot the Socket.IO.
+ * Event type for the Socket.IO.
  * See: https://github.com/LearnBoost/socket.io/wiki/Exposed-events#client
  * @enum {string}
  */
@@ -76,11 +76,32 @@ socketio.Socket.EventType = {
 
 
 /**
- * Whether the client-side Socket.IO script was imported.
- * @type {boolean}
- * @private
+ * State for theSocket.IO sciprt loading.
+ * @enum {string}
  */
-socketio.Socket.imported_ = false;
+socketio.Socket.State = {
+  /** Has not started loading yet. */
+  UNINITIALIZED: 'uninitialized',
+  /** Is loading. */
+  LOADING: 'loading',
+  /** Fully loaded. */
+  COMPLETE: 'complete'
+};
+
+
+/**
+ * Whether the client-side Socket.IO script was imported.
+ * @type {socketio.Socket.State}
+ */
+socketio.Socket.state = socketio.Socket.State.UNINITIALIZED;
+
+
+/**
+ * Element ID for the Socket.IO script tag.
+ * @type {string}
+ * @const
+ */
+socketio.Socket.SCRIPT_ID = 'socket-io-closure';
 
 
 /**
@@ -232,23 +253,35 @@ socketio.Socket.prototype.open = function(url) {
  * Imports client-side Socket.IO script.
  */
 socketio.Socket.prototype.importSocketIo = function() {
-  if (socketio.Socket.imported_) {
-    this.handleScriptLoad_();
-    return;
+  var script;
+
+  switch (socketio.Socket.state) {
+    case socketio.Socket.State.COMPLETE:
+      this.handleScriptLoad_();
+      break;
+    case socketio.Socket.State.LOADING:
+      script = goog.dom.getElement(socketio.Socket.SCRIPT_ID);
+      this.handler_.listen(script, goog.events.EventType.LOAD,
+          this.handleScriptLoad_);
+      break;
+    case socketio.Socket.State.UNINITIALIZED:
+      var uriObj = goog.Uri.parse(this.serverAddr_);
+      uriObj.setPath(socketio.Socket.SCRIPT_PATH);
+
+      script = goog.dom.createDom('script', {
+          'src': uriObj.toString(),
+          'type': 'text/javascript',
+          'id': socketio.Socket.SCRIPT_ID });
+
+      this.handler_.listen(script, goog.events.EventType.LOAD,
+          this.handleScriptLoad_);
+
+      goog.dom.getDocument().body.appendChild(script)
+      socketio.Socket.state = socketio.Socket.State.LOADING;
+      break;
+    default:
+      throw Error('Invalid state: ' + socketio.Socket.state);
   }
-
-  var dom = goog.dom.getDomHelper();
-  var uriObj = goog.Uri.parse(this.serverAddr_);
-  uriObj.setPath(socketio.Socket.SCRIPT_PATH);
-
-  var script = goog.dom.createDom('script', { 'src': uriObj.toString(),
-      'type': 'text/javascript' });
-
-  this.handler_.listen(script, goog.events.EventType.LOAD,
-      this.handleScriptLoad_);
-
-  dom.getDocument().body.appendChild(script)
-  socketio.Socket.imported_ = true;
 };
 
 
@@ -316,6 +349,8 @@ socketio.Socket.prototype.handleScriptLoad_ = function() {
   if (!goog.isDefAndNotNull(io)) {
     throw Error('Cannot find io: ' + io);
   }
+
+  socketio.Socket.state = socketio.Socket.State.COMPLETE;
 
   this.socket_ = io['connect'](this.serverAddr_);
   this.dispatchEvent(socketio.Socket.EventType.LOAD);
