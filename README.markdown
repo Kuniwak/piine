@@ -7,7 +7,7 @@ Snapshots
 ---------
 
 ### piine client
-Audience can send feedback (called "piine!") to a speaker by touching his device.
+Audience can send feedback (called "piine!") to a speaker by touching thier device.
 
 ![snapshot of the piine client](http://orgachem.github.io/piine/images/snapshot-client.png)
 
