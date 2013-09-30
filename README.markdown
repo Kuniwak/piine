@@ -1,14 +1,30 @@
-# piine
-
+piine
+=====
 piine provides Real-Time Feedback during your presentation.
 
-## Snapshots
 
-## How to use
+Snapshots
+---------
+
+### piine client
+Audience can send feedback (called "piine!") to a speaker by touching thier device.
+
+![snapshot of the piine client](http://orgachem.github.io/piine/images/snapshot-client.png)
+
+
+### piine viewer
+You can display a "piine" viewer by a projector.
+The "piine" viewer shows: who gets interested or excited **now**, how many users were joined.
+
+![snapshot of the piine viewer](http://orgachem.github.io/piine/images/snapshot-viewer.png)
+
+
+How to use
+----------
 
 ### Preparing
 
-1. Setup Closure tools
+1. Setup the [Closure Tools](https://developers.google.com/closure/)
 
     Enter following commands in the terminal:
 
@@ -20,7 +36,7 @@ piine provides Real-Time Feedback during your presentation.
 
 2. Modify Server Addresses
 
-    Modify server assress and port in `piine-client/development/js_dev/piine/app.js:52`, `piine-client/development/js_dev/piine/app.js:52`, `piine-server/server.js:4`.
+    Modify server addresses and ports in `piine-client/development/js_dev/piine/app.js:52`, `piine-client/development/js_dev/piine/app.js:52`, `piine-server/server.js:4`.
 
 3. Compile
 
@@ -32,7 +48,7 @@ piine provides Real-Time Feedback during your presentation.
 
 4. Deploy
 
-    Deploy `piine-client/production` and `piine-viewer/production` on your web server.
+    Deploy `piine-client/production` and `piine-viewer/production` to your web server.
 
 5. Start on Your Server
 
@@ -43,44 +59,46 @@ piine provides Real-Time Feedback during your presentation.
 
 6. Operation Check
 
-    Open `piine-viewer/production` (called "pione" viewer) on your PC (because "piine" viewer requires a high-performance device).
+    Open `piine-viewer/production` (called "pione" viewer) on your device.
 
-    Next, open `piine-client/production` (called "piine" client) on another tab/window or your device.
+    Next, open `piine-client/production` (called "piine" client) on another your device or tab/window.
 
-    Next, click/touch your device.
+    Next, touch/click the "piine" client (then, you should see the "piine" viewer too).
  
 7. Sleep "piine" Server
 
-    Sleep "piine" server by `Ctrl+C` on your server.
+    Sleep your "piine" server by `Ctrl+C`.
 
 ### Presentation
 
 1. Connect to a Projector
 
-    Connect your device to projector.
+    Connect your device to the projector.
 
 2. Start "piine" Server
 
     Enter following commands in the terminal:
 
         (in `piine` directory)
-        $ node piine-server/server.js
+        $ nohup node piine-server/server.js > piine.log &
 
-3. Open "piine" Viewer on Your Device
+3. Open a "piine" Viewer on Your Device
 
-    Open "piine" viewer on your device that was connected to the projector.
+    Open a "piine" viewer on your device that was connected to the projector.
 
-4. Get Audience to join "piine"
+4. Get Audience to Join the "piine" Network
 
     Get audience to open "piine" client on own devices.
 
-5. Lecture how-to-use "piine" to audience
+5. Lecture How-To-Use the "piine" Client to Audience
 
     Say:
 
-    > Please touch "piine!" at any time when you get excited or interested my speech!
+    > Please touch "piine!" at any time when you get excited or interested!
 
-## Special thanks
+
+Special Thanks
+--------------
 
  * Development tool
    * [cocopon](https://github.com/cocopon)
