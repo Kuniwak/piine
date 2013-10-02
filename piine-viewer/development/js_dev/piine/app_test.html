@@ -16,6 +16,7 @@
     </div>
   </div>
   <script type="text/javascript">
+    goog.require('goog.Uri');
     goog.require('goog.async.Deferred');
     goog.require('goog.events.EventHandler');
     goog.require('goog.structs');
@@ -34,16 +35,17 @@
     function testResilienceAgainstTooManyUsers() {
       asyncTestCase.waitForAsync('ResilienceAgainstTooManyUsers');
 
-      var MAX_TRY_COUNT = 5;
-      var MAX_USERS_COUNT = 10;
+      var URI = goog.Uri.parse(piine.App.SERVER_ADDRES);
+      var MAX_TRY_COUNT = 1;
+      var MAX_USERS_COUNT = 2;
       var MAX_INTERVAL = 50;
       var socketSet = new goog.structs.Set();
       var handler = new goog.events.EventHandler();
       var count = MAX_TRY_COUNT * MAX_USERS_COUNT;
 
       function getTriesAsync() {
-        var current;
-        var last = getTryAsync();
+        var current = getTryAsync();
+        var last = current;
 
         for (var i = MAX_TRY_COUNT - 1; i > 0; --i) {
           current = last.addCallback(function() {
@@ -55,8 +57,8 @@
       };
 
       function getTryAsync() {
-        var current;
-        var last = getTaskAsync();
+        var current = getTaskAsync();
+        var last = current;
 
         for (var i = MAX_USERS_COUNT - 1; i > 0; --i) {
           current = last.addCallback(function() {
@@ -78,7 +80,7 @@
           }, MAX_INTERVAL * Math.random());
         });
 
-        socket.open(piine.App.SERVER_ADDRES);
+        socket.open(URI.toString(), { 'host': URI.getDomain(), 'port': URI.getPort(), 'force new connection': true });
         socketSet.add(socket);
         return socketAsync;
       };
