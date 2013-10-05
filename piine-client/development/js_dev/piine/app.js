@@ -49,7 +49,7 @@ piine.App.VIEW_ID = 'piine-view';
  * @type {string}
  * @const
  */
-piine.App.SERVER_ADDRESS = 'http://54.200.105.40:8888/';
+piine.App.SERVER_ADDRESS = 'http://54.238.162.99:8888/';
 
 
 /**
