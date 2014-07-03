@@ -9,14 +9,14 @@ Snapshots
 ### piine client
 Audience can send feedback (called "piine!") to a speaker by touching thier device.
 
-![snapshot of the piine client](http://orgachem.github.io/piine/images/snapshot-client.png)
+![snapshot of the piine client](http://kuniwak.github.io/piine/images/snapshot-client.png)
 
 
 ### piine viewer
 You can display a "piine" viewer by a projector.
 The "piine" viewer shows: who gets interested or excited **now**, how many users were joined.
 
-![snapshot of the piine viewer](http://orgachem.github.io/piine/images/snapshot-viewer.png)
+![snapshot of the piine viewer](http://kuniwak.github.io/piine/images/snapshot-viewer.png)
 
 
 How to use
