@@ -1,0 +1,78 @@
+html, body {
+  min-height: 600px;
+  height: 100%;
+  margin: 0;
+}
+
+
+body {
+  font-family: sans-serif;
+  font-size: 13px;
+  background-color: #eee;
+}
+
+
+a {
+  color: #0088cc;
+  text-decoration: none;
+}
+
+
+a:hover,
+a:focus {
+  color: #005580;
+  text-decoration: underline;
+}
+
+
+.piine-view {
+  height: 100%;
+  margin: 0 auto;
+}
+
+
+.piine-container {
+  position: absolute;
+  height: 110px;
+  top: 50%;
+  width: 100%;
+  padding-left: 20%;
+  margin-top: -55px;
+  box-sizing: border-box;
+  box-sizing: -moz-border-box;
+}
+
+
+.piine-user-reaction-graph {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -300px 0 0 -400px;
+}
+
+
+.piine-info {
+  margin: 0;
+  letter-spacing: 1px;
+  font-family: 'Oxygen', sans-serif;
+  text-align: center;
+  color: #000;
+  opacity: 0.4;
+  cursor: default;
+}
+
+
+.piine-logo {
+  margin: 0;
+  font-family: 'Sansita One', cursive;
+  font-size: 600%;
+  text-align: center;
+  cursor: default;
+}
+
+
+img.piine-profile-icon {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+}
