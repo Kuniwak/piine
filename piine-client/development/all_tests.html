@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>All JsUnit Tests</title>
-  <link rel="stylesheet" href="../closure/library/closure/goog/css/multitestrunner.css"><!--@multitestrunner_css@-->
+  <link rel="stylesheet" type="text/css" href="../closure/library/closure/goog/css/multitestrunner.css"><!--@multitestrunner_css@-->
 </head>
 <body>
   <div id="runner">foo bar</div>
-  <script src="../closure/library/closure/goog/base.js"></script><!--@base_js@-->
+  <script type="text/javascript" src="../closure/library/closure/goog/base.js"></script><!--@base_js@-->
   <script type="text/javascript"> goog.require('goog.testing.MultiTestRunner'); </script>
   <script type="text/javascript">
-    var testFiles = ['js_dev/piine/app_test.html', 'js_dev/piine/graph/math/math_test.html'];/*@test_files@*/
+    var testFiles = ['js_dev/piine/app_test.html'];/*@test_files@*/
     var testRunner = new goog.testing.MultiTestRunner();
     testRunner.addTests(testFiles);
     testRunner.render(document.getElementById('runner'));
