@@ -1,0 +1,6 @@
+[submodule "piine-client/development/js_dev/socketio"]
+	path = piine-client/development/js_dev/socketio
+	url = https://github.com/OrgaChem/socket.io-closure
+[submodule "piine-viewer/development/js_dev/socketio"]
+	path = piine-viewer/development/js_dev/socketio
+	url = https://github.com/OrgaChem/socket.io-closure
