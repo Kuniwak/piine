@@ -57,7 +57,7 @@ How to use
 
 6. Operation Check
 
-    Open `piine-viewer/production` (called "pione" viewer) on your device.
+    Open `piine-viewer/production` (called "piine" viewer) on your device.
 
     Next, open `piine-client/production` (called "piine" client) on another your device or tab/window.
 
