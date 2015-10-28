@@ -24,16 +24,7 @@ How to use
 
 ### Preparing
 
-1. Setup the [Closure Tools](https://developers.google.com/closure/)
-
-    Enter following commands in the terminal:
-
-        (in `piine` directory)
-        $ python piine-client/tools/setup.py
-        $ python piine-viewer/tools/setup.py
-        $ cd piine-server
-        $ npm install socket.io
-
+1. Install [googkit](https://github.com/googkit/googkit)
 2. Modify Server Addresses
 
     Modify server addresses and ports in `piine-client/development/js_dev/piine/app.js:52`, `piine-client/development/js_dev/piine/app.js:52`, `piine-server/server.js:4`.
@@ -43,8 +34,13 @@ How to use
     Enter following commands in the terminal:
 
         (in `piine` directory)
-        $ python piine-client/tools/compile.py
-        $ python piine-viewer/tools/compile.py
+        $ pushd piine-client
+        $ googkit setup
+        $ googkit build
+        $ popd
+        $ pushd piine-viewer
+        $ googkit setup
+        $ googkit build
 
 4. Deploy
 
