@@ -1,8 +1,8 @@
 // This script licensed under the MIT.
 // http://orgachem.mit-license.org
 
-var io = require('socket.io').listen(8888);
-io.set('log level', 1);
+var PORT = process.env.PORT || 8888;
+var io = require('socket.io').listen(PORT);
 
 var userCounter = 0;
 

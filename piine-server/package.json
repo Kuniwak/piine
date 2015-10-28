@@ -1,0 +1,23 @@
+{
+  "name": "piine-server",
+  "version": "1.0.0",
+  "description": "\"piine\" is a web app that provides real-time feedback during your presentation",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kuniwak/piine.git"
+  },
+  "author": "Kuniwak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kuniwak/piine/issues"
+  },
+  "homepage": "https://github.com/Kuniwak/piine#readme",
+  "dependencies": {
+    "socket.io": "^1.3.7"
+  }
+}

@@ -51,6 +51,8 @@ How to use
     Enter following commands in the terminal:
 
         (in `piine` directory)
+        $ cd piine-server
+        $ npm install
         $ node piine-server/server.js
 
 6. Operation Check
